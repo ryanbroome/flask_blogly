@@ -38,7 +38,7 @@ def show_base():
 @app.route('/users')
 def list_users():
     """show home page"""
-    users = User.query.all()
+    users = User.query.order_by(User.last_name, User.first_name).all()
     return render_template('list.html', users=users)
 
 # GET /users/new
