@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %} Edit Post Form {% endblock %} {% block content %}
+<h2>Edit {{post.title}}Post</h2>
+<br />
+<p>Original Title: {{post.title}}</p>
+<p>Original Content: {{post.content}}</p>
+<form action="/posts/{{post.id}}/edit" method="POST">
+  <label for="add_title">New Title</label>
+  <br />
+  <input id="add_title" type="text" name="title" placeholder="title" />
+  <br />
+  <br />
+  <label for="add_content">New Content</label>
+  <br />
+  <input id="add_content" type="text" name="content" placeholder="content" />
+  <br />
+  <br />
+  <button>Edit Post</button>
+</form>
+<br />
+
+<a href="/users/{{user.id}}">Back to {{user.first_name}}'s' detail</a>
+<br />
+{% endblock %}

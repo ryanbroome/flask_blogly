@@ -1,7 +1,9 @@
 from unittest import TestCase
 from app import app
-from models import db, connect_db
+from models import db
+from models import connect_db
 from models import User
+
 
 # Use test database and don't clutter tests with SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///user_test_db'

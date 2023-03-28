@@ -4,12 +4,28 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/app.css" />
     <title>{% block title %}Base {% endblock %} -Blogly</title>
   </head>
   <body>
     <h1>Blogly</h1>
     {% block content %}
-    <a href="/users">User List</a>
+    <h3>Recent Posts:</h3>
+    <section class="recent_posts">
+      <ul>
+        {% for post in recent_posts %}
+        <li>
+          <a href="/posts/{{post.id}}">{{post.title}}</a>
+          <p>{{post.content}}</p>
+          <p>{{post.user.full_name(post.user.id)}} - {{post.created_at}}</p>
+        </li>
+        <br />
+        {% endfor %}
+      </ul>
+    </section>
     {% endblock %}
+    <br />
+    <a class="back_button" href="/users">Users</a>
+    <a class="back_button" href="/">Home</a>
   </body>
 </html>

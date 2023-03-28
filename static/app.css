@@ -1,0 +1,96 @@
+a {
+    text-decoration: none;
+    color: rgb(244, 229, 229);
+    background-color: rgb(rgb(137, 207, 230));
+}
+
+a:hover {
+    text-decoration: none;
+    background-color: white;
+    color: rgb(73, 139, 84);
+}
+
+body {
+    background-color: rgb(64, 131, 173);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+h1 {
+    color: white;
+}
+
+h3 {
+    color: white;
+}
+
+img {
+    height: 200px;
+    border-radius: 5px;
+}
+
+li.post a {
+    color: black;
+}
+
+textarea {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+p {
+    color: white;
+}
+
+.back_button {
+    background-color: rgb(137, 207, 230);
+    color: white;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    width: 5vw;
+}
+
+.back_button:hover {
+    background-color: white;
+    color: rgb(73, 139, 84);
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    width: 5vw;
+}
+
+.delete button {
+    background-color: rgb(255, 67, 67);
+    border: 1px solid white;
+    color: rgb(245, 248, 250);
+}
+
+.edit button {
+    background-color: rgb(183, 230, 198);
+    border: 1px solid white;
+    color: rgb(245, 248, 250);
+}
+
+.user_form_container {
+    margin: 0px auto;
+}
+
+#user_container {
+    align-items: center;
+    background-color: rgba(233, 227, 237, 0.85);
+    border: 2px solid rgba(217, 127, 255, .25);
+    border-radius: 5px;
+    box-shadow: 8px 5px 10px rgba(255, 255, 255, 0.89);
+    display: flex;
+    height: 200px;
+    flex-direction: row;
+    width: 50vw;
+}
+
+#post_container {
+    display: flex;
+    color: rgb(26, 2, 2);
+    background-color: rgba(233, 227, 237, .85);
+}

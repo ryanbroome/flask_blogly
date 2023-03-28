@@ -1,18 +1,29 @@
 {% extends "base.html" %} {% block title %}{{user.full_name(user.id)}} Details{% endblock %} {% block content %}
-<h1>User Detail Page</h1>
-<img src="{{user.image_url}}" alt="user image" />
 
-<h3>{{user.full_name(user.id)}}</h3>
+<section id="user_container">
+  <img src="{{user.image_url}}" alt="user image" />
+  <h4>{{user.full_name(user.id)}}</h4>
+  <div class="user_form_container">
+  <form class="edit" action="/users/{{user.id}}/edit">
+    <button>Edit</button>
+  </form>
+  <form class="delete" action="/users/{{user.id}}/delete" method="POST">
+    <button>Delete</button>
+  </form>
+</div>
+</section>
 
-<form action="/users/{{user.id}}/edit">
-  <button>Edit</button>
-</form>
-<!-- <button><a href="/users/{{user.id}}/edit">Edit</a></button> -->
+<h3>{{user.first_name}}'s Posts</h3>
 
-<form action="/users/{{user.id}}/delete" method="POST">
-  <button>Delete</button>
-</form>
-<!-- <button><a href="/users/{{user.id}}/delete">Delete</a></button> -->
-
-<a href="/">Back</a>
+<section id="post_container">
+  <ul>
+    {% for post in posts %}
+    <li class="post">
+      <a href="/posts/{{post.id}}">{{post.title}} - {{post.created_at}}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+<a href="/users/{{user.id}}/posts/new"><i>{{user.full_name(user.id)}} Add Post ?<i></a>
 {% endblock %}
+
