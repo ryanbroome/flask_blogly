@@ -3,6 +3,8 @@ from models import db
 from models import connect_db
 from models import User
 from models import Post
+from models import Tag
+from models import PostTag
 
 from flask import Flask
 from flask import current_app
@@ -10,21 +12,18 @@ from flask import redirect
 from flask import render_template 
 from flask import request
 from flask import session
+from flask import flash
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from datetime import datetime, date, time
+from datetime import datetime
 
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///users_db"
-
 app.config['SECRET_KEY'] = 'superSecretPassword'
-
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
-
 app.config["SQLALCHEMY_ECHO"] = True
-
 app.config["SQLALchemy_TRACK_MODIFICATIONS"] = False
 
 debug = DebugToolbarExtension(app)
@@ -56,11 +55,25 @@ def list_users():
     users = User.query.order_by(User.last_name, User.first_name).all()
     return render_template('list.html', users=users)
 
+# Get /tags
+@app.route('/tags')
+def list_tags():
+    """show tags page"""
+    t = Tag.query
+    tags = t.all()
+    return render_template('tagsList.html', tags=tags)
+
 # GET /users/new
 @app.route('/users/new')
 def show_add_user_form():
     """show add user form page"""
     return render_template('add_user_form.html')
+
+# GET /users/new
+@app.route('/tags/new')
+def show_add_tag_form():
+    """show add tag form page"""
+    return render_template('add_tag_form.html')
 
 # GET /users/[user_id]/posts/new
 @app.route('/users/<int:user_id>/posts/new')
@@ -81,7 +94,21 @@ def create_user():
 
     db.session.add(new_user)
     db.session.commit()
+    flash(f'User {new_user.first_name} Added')
     return redirect("/users")
+
+# POST /tags/new 
+@app.route('/tags/new', methods=["POST"])
+def create_tag():
+    """Add new tag to the database"""
+    name = request.form["name"]
+    new_tag = Tag(name=name)
+
+    db.session.add(new_tag)
+    db.session.commit()
+    flash(f'Tag {new_tag.name} has been added')
+
+    return redirect("/tags")
 
 # POST /users/{user_id}/posts/new
 @app.route('/users/<int:user_id>/posts/new', methods=["POST"])
@@ -94,7 +121,7 @@ def create_post(user_id):
 
     db.session.add(new_post)
     db.session.commit()
-    # user = User.query.get_or_404(user_id)
+    flash(f'Post {new_post.title} Added')
     return redirect(f"/users/{user_id}")
 
 # GET /users/[user-id]]
@@ -106,14 +133,29 @@ def show_user(user_id):
     time = stamp()
     return render_template("details.html", user=user, posts=posts, time=time)
 
+# GET /tags/[tag-id]]
+@app.route('/tags/<int:tag_id>')
+def show_tag(tag_id):
+    """Show details about a single tag"""
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template("tagDetails.html", tag=tag)
+
 # GET /posts/[post-id]]
 @app.route('/posts/<int:post_id>')
 def show_post(post_id):
     """Show details about a single post"""
     post = Post.query.get_or_404(post_id)
     user = User.query.get_or_404(post.user_id)
+    tag_posts = PostTag.query.all()
+    post_tag_id_list = [post.tag_id for post in tag_posts]
+    post_list = []
 
-    return render_template("post_details.html", post=post, user=user)
+    for post_tag_id in post_tag_id_list:
+        if post_tag_id == post.id:
+            post_list.append(Post.query.get_or_404(post.id))
+    # Post.query.get_or_404(post.tag_id).title
+
+    return render_template("post_details.html", post=post, user=user, post_tag_id_list=post_tag_id_list, post_list=post_list)
 
 # GET /users/{user.id}/edit
 @app.route('/users/<int:user_id>/edit')
@@ -129,6 +171,13 @@ def show_edit_post_form(post_id):
     post = Post.query.get_or_404(post_id)
     user = User.query.get_or_404(post.user_id)
     return render_template("edit_post_form.html", post=post, user=user)
+
+# GET /tags/{tag.id}/edit
+@app.route('/tags/<int:tag_id>/edit')
+def show_edit_tag_form(tag_id):
+    """Edit details about a single tag"""
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template("edit_tag_form.html", tag=tag)
 
 # POST /users/{user.id}/edit
 @app.route('/users/<int:user_id>/edit', methods=["POST"])
@@ -151,7 +200,24 @@ def edit_user(user_id):
 
     db.session.add(user)
     db.session.commit()
+    flash(f'User {user.first_name} edited')
     return redirect('/users')
+
+# POST /tags/{tag.id}/edit
+@app.route('/tags/<int:tag_id>/edit', methods=["POST"])
+def edit_tag(tag_id):
+    """Edit details about a single tag"""
+    tag = Tag.query.get_or_404(tag_id)
+
+    name = request.form["name"]
+
+    if len(name) > 0:
+        tag.name = name
+
+    db.session.add(tag)
+    db.session.commit()
+    flash(f' Tag {tag.name} edited')
+    return redirect('/tags')
 
 # POST /posts/{post.id}/edit
 @app.route('/posts/<int:post_id>/edit', methods=["POST"])
@@ -170,6 +236,7 @@ def edit_post(post_id):
     
     db.session.add(post)
     db.session.commit()
+    flash(f'Post {post.title} Edited')
     return redirect(f'/posts/{post.id}')
 
 #POST /users/{user.id}/delete
@@ -180,8 +247,20 @@ def delete_user(user_id):
     user =User.query.get(user_id)
     db.session.delete(user)
     db.session.commit()
+    flash(f'User {user.first_name} Deleted')
 
     return redirect('/users')
+
+#POST /tags/{tag.id}/delete
+@app.route('/tags/<int:tag_id>/delete', methods=["POST"])
+def delete_tag(tag_id):
+    """Delete tag from db"""
+
+    tag =Tag.query.get(tag_id)
+    db.session.delete(tag)
+    db.session.commit()
+    flash(f'Tag {tag.name} deleted')
+    return redirect('/tags')
 
 #POST /users/{user.id}/delete
 @app.route('/posts/<int:post_id>/delete', methods=["POST"])
@@ -190,9 +269,11 @@ def delete_post(post_id):
     post =Post.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-
+    flash(f'Post {post.title} deleted')
     return redirect(f'/users/{post.user_id}')
 
-# todo Styling, work on css positioning, add a navbar / footbar, home page with 5 most recent posts
-# todo TESTING not working, not detecting tests, maybe old version of python?
-# todo REFACTOR, REDUCE ANY DUPLICATION. SEE IF ANY FORMS OR OTHER CODE BLOCKS CAN BE REUSED?? Seems like edit forms could be automated since similar. 
+
+
+
+# todo TESTING not working, not detecting tests, maybe old version of python? not really clear why it's not working followed lecture to build still doesn't work
+# todo REFACTOR, REDUCE ANY DUPLICATION. SEE IF ANY FORMS OR OTHER CODE BLOCKS CAN BE REUSED?? Seems like edit, add, delete forms could be automated or looped and created with necessary inputs since all forms are pretty similar. 

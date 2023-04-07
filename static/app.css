@@ -1,29 +1,40 @@
+/* TODO update colors and styling to look decent more professional */
 a {
     text-decoration: none;
-    color: rgb(244, 229, 229);
-    background-color: rgb(rgb(137, 207, 230));
+    color: #0049b7;
 }
 
 a:hover {
     text-decoration: none;
-    background-color: white;
-    color: rgb(73, 139, 84);
+    background-color: #ffffff;
+    color: #0049b7;
+    border-radius: 5px;
 }
 
 body {
-    background-color: rgb(64, 131, 173);
+    background-color: #fff78559;
 }
 
 button:hover {
     cursor: pointer;
 }
 
+button a {
+    color: #0049b7;
+    background-color: rgb(255, 255, 255);
+}
+
+button {
+    border-radius: 5px;
+    background-color: white;
+}
+
 h1 {
-    color: white;
+    color: #0049b7;
 }
 
 h3 {
-    color: white;
+    color: #0049b7;
 }
 
 img {
@@ -32,39 +43,49 @@ img {
 }
 
 li.post a {
-    color: black;
+    color: #0049b7;
+}
+
+navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+p {
+    color: #0049b7;
 }
 
 textarea {
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-p {
-    color: white;
-}
-
 .back_button {
-    background-color: rgb(137, 207, 230);
+    background-color: #00DDFF;
     color: white;
-    position: relative;
+    position: sticky;
     text-align: center;
     text-decoration: none;
-    width: 5vw;
+    width: 10vw;
+    border: 1px solid #0049b7;
+    border-radius: 5px;
 }
 
 .back_button:hover {
     background-color: white;
-    color: rgb(73, 139, 84);
-    position: relative;
+    color: #0049b7;
+    position: sticky;
     text-align: center;
     text-decoration: none;
-    width: 5vw;
+    width: 10vw;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px;
 }
 
 .delete button {
-    background-color: rgb(255, 67, 67);
+    background-color: #ff1D58;
     border: 1px solid white;
-    color: rgb(245, 248, 250);
+    color: white;
 }
 
 .edit button {
@@ -73,16 +94,24 @@ p {
     color: rgb(245, 248, 250);
 }
 
+.flash {
+    display: inline-block;
+    color: #0049b7;
+    background-color: white;
+    border: 1px solid #0049b7;
+    border-radius: 5px;
+}
+
 .user_form_container {
     margin: 0px auto;
 }
 
 #user_container {
     align-items: center;
-    background-color: rgba(233, 227, 237, 0.85);
-    border: 2px solid rgba(217, 127, 255, .25);
+    background-color: #fff785;
+    border: 2px solid #0049b7;
     border-radius: 5px;
-    box-shadow: 8px 5px 10px rgba(255, 255, 255, 0.89);
+    box-shadow: 8px 5px 10px #00DDFF;
     display: flex;
     height: 200px;
     flex-direction: row;
@@ -92,5 +121,18 @@ p {
 #post_container {
     display: flex;
     color: rgb(26, 2, 2);
-    background-color: rgba(233, 227, 237, .85);
+    background-color: #fff785;
+}
+
+#tag_container ul {
+    display: inline-block;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid blue;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+
+#post {
+    background-color: #fff785;
 }

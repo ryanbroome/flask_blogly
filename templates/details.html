@@ -5,16 +5,16 @@
   <h4>{{user.full_name(user.id)}}</h4>
   <div class="user_form_container">
   <form class="edit" action="/users/{{user.id}}/edit">
-    <button>Edit</button>
+    <button>Edit User</button>
   </form>
   <form class="delete" action="/users/{{user.id}}/delete" method="POST">
-    <button>Delete</button>
+    <button>Delete User</button>
   </form>
 </div>
 </section>
 
 <h3>{{user.first_name}}'s Posts</h3>
-
+<hr>  
 <section id="post_container">
   <ul>
     {% for post in posts %}

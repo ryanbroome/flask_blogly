@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %} {{tag.name}} Details {% endblock %} {% block content %}
+<h3>Tag: {{tag.name}} - Post List</h3>
+{% for msg in get_flashed_messages( ) %}
+<p class="flash">{{ msg }}</p>
+{% endfor %}
+<ul>
+  {% for post in tag.posts %}
+  <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+  {% endfor %}
+</ul>
+<hr />
+<form class="edit" action="/tags/{{tag.id}}/edit">
+  <button>Edit Tag</button>
+</form>
+<form class="delete" action="/tags/{{tag.id}}/delete" method="POST">
+  <button>Delete Tag</button>
+</form>
+{% endblock %}
